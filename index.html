@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <title>Travel Summary (Web Version)</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script type="text/javascript" src="main.js"></script>
+        <style>
+        * {
+            box-sizing: border-box;
+        }
+        html, body {
+            font-family: -apple-system, 'SF Pro Text', 'Helvetica Neue', 'Source Code Pro', 'Helvetica Neue', -apple-system, sans-serif, 'PingFang SC', 'Noto Sans CJK SC';
+            font-size: 20px;
+            line-height: 1;
+        }
+        .ff-sansserif {
+            font-family: -apple-system, 'SF Pro Text', 'Helvetica Neue', 'Source Code Pro', 'Helvetica Neue', -apple-system, sans-serif, 'PingFang SC', 'Noto Sans CJK SC';
+        }
+        .ff-monospace {
+            font-family: 'JetBrains Mono', 'Source Code Pro', 'Menlo', monospace, 'Noto Sans CJK CN';
+        }
+        .invisible {
+            opacity: 0;
+            visibility: hidden;
+        }
+        .d-none {
+            display: none;
+        }
+        #cont, #controls {
+            background: #FFF;
+            width: 750px;
+            padding: 60px 40px 10px;
+            margin: 0 auto;
+        }
+        .section2 {
+            border: 2px solid #000;
+            width: 670px;
+            padding: 25px 15px 10px 5px;
+            margin: 0 0 15px;
+            page-break-inside: avoid;
+            page-break-after: auto;
+        }
+        .section2[data-type="note"] {
+            min-height: 120px;
+        }
+        .section2[data-type="contact"],
+        .section2[data-type="footer"] {
+            border-color: rgba(0, 0, 0, 0);
+            padding: 0;
+            margin: 0 0 40px;
+        }
+        .section2[data-type="footer"] {
+            font-size: 16px;
+            opacity: 0.75;
+        }
+        .section2-header {
+            font-size: 44px;
+            text-align: center;
+            float: left;
+            width: 100px;
+            padding: 8px 0 0;
+        }
+        .section2-content {
+            font-size: 0px;
+            padding: 0 0 0 110px;
+        }
+        .lig-arrow-right {
+            font-size: 20px;
+            font-weight: 300;
+            /* color: #0066EE; */
+            /* opacity: 0.5; */
+            display: block;
+            position: absolute;
+            top: 4px;
+            left: 185px;
+            /* transform: translate(3px, -3px); */
+        }
+        .section2-content .row {
+            font-size: 24px;
+            padding: 0 0 12px;
+        }
+        .section2-content .row.padless {
+            padding: 0 0 6px;
+        }
+        .section2-content .row .col {
+        }
+        .section2-content .row .col-1 {
+            position: relative;
+            display: inline-block;
+            width: 304px;
+        }
+        .section2-content .row .col-2 {
+            display: inline-block;
+        }
+        p {
+            font-size: 20px;
+            line-height: 24px;
+            margin: 0 0 10px;
+        }
+        p:last-child {
+            margin: 0;
+        }
+        .big1 {
+            font-size: 30px;
+            font-weight: 600;
+        }
+        .big2 {
+            font-size: 30px;
+            font-weight: 800;
+        }
+        .small {
+            font-size: 20px;
+            line-height: 20px;
+        }
+        .bold {
+            font-weight: 900;
+        }
+        .section2-content .sup {
+            font-size: 14px;
+            font-weight: 400;
+            vertical-align: middle;
+        }
+        </style>
+        <style>
+        /* #controls */
+        #controls button {
+            font-size: 18px;
+            line-height: 30px;
+            color: #FFF;
+            background: #27F;
+            border: none;
+            border-radius: 4px;
+            display: block;
+            min-width: 240px;
+            padding: 5px 20px;
+            margin: 0 auto 20px;
+            cursor: pointer;
+        }
+        </style>
+        <style id="js-style1">
+        </style>
+        <script type="text/javascript">
+        var themeStyleScreen = `
+            body, #cont, #controls {
+                background: #335072 !important;
+            }
+            body {
+                color: #FFF;
+            }
+            #controls > .section2 {
+                color: #000;
+            }
+            #cont {
+                min-height: 1334px;
+            }
+            .section2 {
+                color: #000;
+                background: #FFF;
+                border: none;
+                border-radius: 8px;
+                box-shadow: rgba(0, 0, 0, 0.4) 0 4px 22px;
+                margin: 0 0 30px;
+            }
+            .section2[data-type="contact"] {
+            }
+            .section2[data-type="contact"],
+            .section2[data-type="footer"] {
+                color: #FFF;
+                background: none;
+                box-shadow: none;
+            }
+            [data-type="date"] {
+                color: #FFF;
+                text-align: center;
+                border-top: 2px solid #FFF;
+                padding: 40px 0 0;
+                margin: 0 0 30px;
+            }
+        `;
+        var themeStylePrint = `
+            [data-type="date"] {
+                color: #000;
+                text-align: center;
+                border-top: 2px solid #000;
+                padding: 40px 0 0;
+                margin: 0 0 30px;
+            }
+        `;
+        document.querySelector('#js-style1').innerHTML = themeStyleScreen;
+        </script>
+    </head>
+    <body>
+        <div id="controls">
+            <h1 style="text-align: center;">Travel Summary Generator</h1>
+            <div class="section2" style="text-align: center; padding: 30px;">
+                <textarea id="js-input1" style="font-size: 18px; border: 2px solid #000; display: block; width: 100%; height: 240px; resize: none; padding: 5px; margin: 0 0 20px;" placeholder="Input the raw text here..."></textarea>
+                <style>
+                #js-input1:focus {
+                    outline: none;
+                    border-color: #27F !important;
+                }
+                </style>
+                <script type="text/javascript">
+                if (localStorage['uuid_cae9d7c68d6741b18a341976e48e290c'] !== undefined) {
+                    // Cache exists
+                    document.querySelector('#js-input1').value = localStorage['uuid_cae9d7c68d6741b18a341976e48e290c'];
+                    var isAutoRenderingFromCache = true;
+                } else {
+
+                }
+                </script>
+                <button id="js-btn2" type="button" name="button">Generate</button>
+                <aside class="" style="font-size: 14px; color: #999; line-height: 20px;">
+                    <div>
+                        Read the <a href="https://github.com/neruthes/travel-summary" style="color: inherit;">documentation</a> on GitHub.
+                    </div>
+                    <div>
+                        Or preview a <span id="js-btn3" style="text-decoration: underline; cursor: pointer;">sample travel</span>.
+                        <script type="text/javascript">
+                        document.querySelector('#js-btn3').addEventListener('click', function (e) {
+                            document.querySelector('#js-input1').value = `contact>>
+# 2020/04: Neruthes
+Guangzhou + Shenzhen
+
+hotel>>
+Guangzhou Nanhu Holiday Inn
+04/27 MON - 04/30 THU
+Metro Line 3 "Tonghe", NE 1 km.
+Add some notes in this line.
+Add more lines of notes.
+
+note>>
+# Sample Note
+This is a sample note.
+Multiple lines are good.
+
+date>>
+2020-04-30 THU
+
+train>>
+C7185
+2020-04-30 THU
+广州东
+14:56
+深圳
+16:15
++0
+Add some notes in this line.
+Add more lines of notes.
+
+date>>
+2020-05-04 MON
+
+flight>>
+HO1156
+2020-05-04 MON
+SZX/T3
+23:35
+SHA/T2
+22:55
++0
+ETKT 018-236905****
+Add some notes in this line.
+Add more lines of notes.`;
+                            document.querySelector('#js-btn2').click();
+                        });
+                        </script>
+                    </div>
+                </aside>
+                <script type="text/javascript">
+                    document.querySelector('#js-btn2').addEventListener('click', function (e) {
+                        var caseRaw = document.querySelector('#js-input1').value.trim().replace(/\n\n+/g, '\n\n').replace(/ /g, '&nbsp;');
+                        var caseRendered = caseRaw.split('\n\n').map((line) => {
+                            if (line.indexOf('>>\n') === -1) {
+                                // Note
+                                return gen.note(line.split('\n').map(x => x.trim()));
+                            } else {
+                                // Other
+                                return gen[line.split('>>\n')[0]](line.split('>>\n')[1].split('\n').map(x => x.trim()));
+                            }
+                        }).join('\n');
+                        localStorage['uuid_cae9d7c68d6741b18a341976e48e290c'] = document.querySelector('#js-input1').value;
+                        document.querySelector('#js-Content').innerHTML = caseRendered;
+                    });
+                </script>
+            </div>
+            <div class="section2" style="text-align: center;">
+                <button id="js-btn1" type="button" name="button" data-state="S1">Use Print Theme</button>
+                <script type="text/javascript">
+                document.querySelector('#js-btn1').addEventListener('click', function (e) {
+                    if (e.target.getAttribute('data-state') === 'S0') { // Change to screen theme
+                        e.target.innerHTML = 'Use Print Theme';
+                        e.target.setAttribute('data-state', 'S1');
+                        var styleText = themeStyleScreen;
+                    } else { // Change to print theme
+                        e.target.innerHTML = 'Use Screen Theme';
+                        e.target.setAttribute('data-state', 'S0');
+                        var styleText = themeStylePrint;
+                    };
+                    document.querySelector('#js-style1').innerHTML = styleText;
+                });
+                </script>
+            </div>
+        </div>
+        <div id="cont">
+            <div id="js-Content">
+                {{CONTENT}}
+            </div>
+            <div class="section2" data-type="footer">
+                Generated with <a href="https://github.com/neruthes/travel-summary-web" style="color: inherit;">github.com/neruthes/travel-summary-web</a>
+            </div>
+        </div>
+        <script type="text/javascript">
+        if (isAutoRenderingFromCache) {
+            document.querySelector('#js-btn2').click();
+        };
+        </script>
+    </body>
+</html>
